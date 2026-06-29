@@ -1,0 +1,30 @@
+as: Washing Machine - Morning Notification
+description: Notifies Hannah and Mark at 06:30 if the washing machine completed overnight
+triggers:
+  - trigger: time
+    at: "06:30:00"
+conditions:
+  - condition: state
+    entity_id: input_boolean.washing_machine_cycle_complete
+    state: "on"
+actions:
+  - action: notify.mobile_app_hannahs_iphone
+    data:
+      title: 🫧 Washing Done!
+      message: The Miele finished overnight — time to hang it out.
+      data:
+        push:
+          interruption-level: time-sensitive
+  - action: notify.mobile_app_padg_neo
+    data:
+      title: 🫧 Washing Done!
+      message: The Miele finished overnight — time to hang it out.
+      data:
+        persistent: true
+        sticky: true
+        tag: washing_machine_done
+        notification_icon: mdi:washing-machine
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.washing_machine_cycle_complete
+mode: single
